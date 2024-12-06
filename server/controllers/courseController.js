@@ -27,17 +27,32 @@ const uploadCourse = (req, res) => {
   }
 
   const query = 'INSERT INTO courses (title, price, image_key) VALUES (?, ?, ?)';
-  
+
   // Use db.query to insert data into the database
   db.query(query, [title, price, image_key], (err, result) => {
     if (err) {
       console.error(err); // Log the error for debugging
       return res.status(500).send('Database error occurred');
     }
-    
+
     // Send success response
     res.status(201).send('Course uploaded successfully');
   });
 };
 
-module.exports = { upload, uploadCourse };
+// Get all courses
+const getAllCourses = (req, res) => {
+  const query = 'SELECT * FROM courses'; // Query to get all courses
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err); 
+      return res.status(500).send('Database error occurred');
+    }
+
+    // Send success response with courses data
+    res.status(200).json(results); 
+  });
+};
+
+module.exports = { upload, uploadCourse, getAllCourses };
