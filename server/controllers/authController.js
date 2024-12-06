@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Register User
 const registerUser = (req, res) => {
@@ -42,7 +44,7 @@ const loginUser = (req, res) => {
 
       // Generate JWT token
       const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      res.status(200).json({ token });
+      res.status(200).json({ token, role: user.role });
     });
   });
 };

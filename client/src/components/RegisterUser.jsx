@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
-const Register = () => {
+const RegisterUser = () => {
+  const navigate = useNavigate(); // Initialize the navigate function
+  const [error, setError] = useState(''); // State to hold error message
   // Single state object to hold form data
   const [formData, setFormData] = useState({
     first_name: '',
@@ -11,7 +14,6 @@ const Register = () => {
     password: '',
     role: 'user', // default role is user
   });
-  
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -25,32 +27,45 @@ const Register = () => {
   // Handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
-
-
+    setError('');
+  
     // Check if the password is strong enough (you can add a more complex check here)
     if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long.');
       return;
     }
-
+  
     try {
       const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
+  
+      const textResponse = await response.text(); // Get the response as plain text
+  
+      // Check if the response is a valid JSON string
+      let data;
+      try {
+        data = JSON.parse(textResponse); // Attempt to parse it as JSON
+      } catch (e) {
+        // If JSON parsing fails, treat it as plain text response
+        data = { message: textResponse };
+      }
   
       if (response.ok) {
         alert('Registration successful!');
         // Optionally redirect user after registration
-      } 
-
+        navigate('/'); // Redirect to the login page
+      } else {
+        setError(data.message || 'Registration failed!');
+      }
     } catch (error) {
       console.error('Error during registration:', error);
-
-    } 
+      setError('An error occurred. Please try again.');
+    }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -132,7 +147,6 @@ const Register = () => {
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-             // Disable button while loading
           >
             Register
           </button>
@@ -142,4 +156,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterUser;
