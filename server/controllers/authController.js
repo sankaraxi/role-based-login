@@ -4,7 +4,7 @@ const db = require('../config/db');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// Register User
+// Register
 const registerUser = (req, res) => {
   const { first_name, last_name, email, department, username, password, role } = req.body;
 
@@ -12,7 +12,7 @@ const registerUser = (req, res) => {
     return res.status(400).send('All fields are required');
   }
 
-  // Hash password before saving
+  // Hashing Password
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return res.status(500).send('Error hashing password');
 
@@ -24,7 +24,7 @@ const registerUser = (req, res) => {
   });
 };
 
-// Login User
+// Login
 const loginUser = (req, res) => {
   const { username, password } = req.body;
 
@@ -42,7 +42,7 @@ const loginUser = (req, res) => {
       if (err) return res.status(500).send('Error comparing passwords');
       if (!isMatch) return res.status(400).send('Invalid username or password');
 
-      // Generate JWT token
+      // JWT token
       const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.status(200).json({ token, role: user.role });
     });

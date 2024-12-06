@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+
 const dotenv = require('dotenv');
+const path = require('path');
 const authRoutes = require('./routes/authRoutes');
+const courseRoutes = require('./routes/courseRoutes');
 const { verifyToken, isAdmin } = require('./middlewares/authMiddleware');
 
 dotenv.config();
@@ -17,6 +20,9 @@ app.use('/api/auth', authRoutes);
 app.get('/admin', verifyToken, isAdmin, (req, res) => {
   res.send('Welcome, Admin!');
 });
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
+app.use('/api/courses', courseRoutes);  
 
 // Start the server
 app.listen(3001, () => {
