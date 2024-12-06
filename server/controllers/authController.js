@@ -4,7 +4,7 @@ const db = require('../config/db');
 
 // Register User
 const registerUser = (req, res) => {
-  const { first_name, last_name, department, username, password, role } = req.body;
+  const { first_name, last_name, email, department, username, password, role } = req.body;
 
   if (!first_name || !last_name || !department || !username || !password || !role) {
     return res.status(400).send('All fields are required');
@@ -14,8 +14,8 @@ const registerUser = (req, res) => {
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return res.status(500).send('Error hashing password');
 
-    const query = 'INSERT INTO users (first_name, last_name, department, username, password, role) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(query, [first_name, last_name, department, username, hashedPassword, role], (err, result) => {
+    const query = 'INSERT INTO users (first_name, last_name, email, department, username, password, role) VALUES (?, ?, ?,?, ?, ?, ?)';
+    db.query(query, [first_name, last_name, email, department, username, hashedPassword, role], (err, result) => {
       if (err) return res.status(500).send('Database error');
       res.status(201).send('User registered successfully');
     });
