@@ -3,7 +3,7 @@ const { upload, uploadCourse, getAllCourses}  = require('../controllers/courseCo
 
 const router = express.Router();
 
-// Route to upload course
+
 router.post('/upload', upload.single('image_key'), uploadCourse);
 router.get('/all', getAllCourses);
 

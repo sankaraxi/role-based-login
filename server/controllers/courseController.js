@@ -21,17 +21,16 @@ const uploadCourse = (req, res) => {
   const { title, price } = req.body;
   const image_key = req.file ? req.file.filename : null;
 
-  // Check if required fields are present
   if (!title || !price || !image_key) {
     return res.status(400).send('All fields (title, price, image) are required');
   }
 
   const query = 'INSERT INTO courses (title, price, image_key) VALUES (?, ?, ?)';
 
-  // Use db.query to insert data into the database
+
   db.query(query, [title, price, image_key], (err, result) => {
     if (err) {
-      console.error(err); // Log the error for debugging
+      console.error(err); 
       return res.status(500).send('Database error occurred');
     }
 

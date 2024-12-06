@@ -5,22 +5,16 @@ const dotenv = require('dotenv');
 const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
-const { verifyToken, isAdmin } = require('./middlewares/authMiddleware');
+
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());  // Allow cross-origin requests
+app.use(cors()); 
 
 // API Routes
 app.use('/api/auth', authRoutes);
-
-// Example of a protected route accessible only by admin
-app.get('/admin', verifyToken, isAdmin, (req, res) => {
-  res.send('Welcome, Admin!');
-});
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
 app.use('/api/courses', courseRoutes);  
 
