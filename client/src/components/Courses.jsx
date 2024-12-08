@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const location = useLocation();
+
+  const { username} = location.state || {};
+  
 
   useEffect(() => {
     // Fetch all courses from the backend
@@ -36,7 +41,7 @@ const Courses = () => {
 
   return (
     <div className="p-6 bg-gray-100">
-      <h2 className="text-2xl font-semibold text-center mb-4">Available Courses</h2>
+      <h2 className="text-2xl font-semibold text-center mb-4">Available Courses for <span className='text-black'>{username}</span></h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.length > 0 ? (
           courses.map((course) => (

@@ -22,12 +22,16 @@ const Login = () => {
       const data = await response.json();
       console.log(data);
       console.log(data.role);
+      // console.log(username)
 
       if (response.ok) {
         if (data.role === 'admin') {
           navigate('/admin');
         } else if (data.role === 'user') {
-          navigate('/courses');
+          navigate('/courses',{
+            state: { username,
+             }
+          });
         } else {
           setError('Unknown role!');
         }
