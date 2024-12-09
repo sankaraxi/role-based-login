@@ -3,6 +3,8 @@ import Login from "./components/Login"
 import RegisterUser from "./components/RegisterUser"
 import Admin from "./components/Admin"
 import Courses from "./components/Courses"
+import SuperAdmin from "./components/SuperAdmin"
+import OverallAdmin from "./components/OverallAdmin"
 
 const App = () => {
     return (
@@ -32,6 +34,14 @@ export const appRouter = createBrowserRouter([
       {
         path: "/courses",
         element: <Courses />,
+      },
+      {
+        path: "/superadmin",
+        element: <SuperAdmin />,
+      },
+      {
+        path: "/mainadmin",
+        element: <OverallAdmin />,
       }
     ] 
   }

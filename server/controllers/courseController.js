@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const db = require('../config/db');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -54,4 +55,52 @@ const getAllCourses = (req, res) => {
   });
 };
 
-module.exports = { upload, uploadCourse, getAllCourses };
+const deleteCourse = (req, res) => {
+  const { courseId } = req.params;
+
+  // Query to get the image_key before deleting the course
+  const getImageQuery = 'SELECT image_key FROM courses WHERE course_id = ?';
+
+  db.query(getImageQuery, [courseId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Database error occurred' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    const imageKey = results[0].image_key;
+    const imagePath = path.join(__dirname, '..', 'uploads', imageKey);
+
+    // Delete the course from the database
+    const deleteQuery = 'DELETE FROM courses WHERE course_id = ?';
+
+    db.query(deleteQuery, [courseId], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Failed to delete course' });
+      }
+
+      if (result.affectedRows > 0) {
+        // Remove the image file from the uploads folder
+        fs.unlink(imagePath, (err) => {
+          if (err) {
+            console.error('Failed to delete the image:', err);
+            return res.status(500).json({
+              message: 'Course deleted, but failed to delete associated image',
+            });
+          }
+
+          res.status(200).json({ message: 'Course and image deleted successfully' });
+        });
+      } else {
+        res.status(404).json({ message: 'Course not found' });
+      }
+    });
+  });
+};
+
+
+module.exports = { upload, uploadCourse, getAllCourses, deleteCourse };

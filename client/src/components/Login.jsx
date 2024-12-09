@@ -27,6 +27,10 @@ const Login = () => {
       if (response.ok) {
         if (data.role === 'admin') {
           navigate('/admin');
+        } else if (data.role === 'superadmin') {
+          navigate('/superadmin');
+        } else if (data.role === 'mainadmin') {
+          navigate('/mainadmin');
         } else if (data.role === 'user') {
           navigate('/courses',{
             state: { username,
