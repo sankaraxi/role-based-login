@@ -7,9 +7,6 @@ const CoursesAdminPanel = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [editCourse, setEditCourse] = useState(null); // To store the course being edited
-  const location = useLocation();
-
-  const { username } = location.state || {};
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -30,27 +27,6 @@ const CoursesAdminPanel = () => {
 
     fetchCourses();
   }, []);
-
-  const handleDeleteCourse = async (courseId) => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/courses/${courseId}`, {
-        method: 'DELETE',
-      });
-
-      console.log(response);
-
-      if (response.ok) {
-        setCourses(courses.filter((course) => course.course_id !== courseId));
-        setMessage('Course deleted successfully.');
-      } else {
-        const data = await response.json();
-        setMessage(data.message || 'Failed to delete course.');
-      }
-    } catch (error) {
-      console.error('Error deleting course:', error);
-      setMessage('An error occurred while deleting the course.');
-    }
-  };
 
   const handleEditCourse = async (e) => {
     e.preventDefault();
@@ -112,12 +88,6 @@ const CoursesAdminPanel = () => {
                   className="mt-4 w-full px-4 py-2 text-white bg-blue-500 rounded-md"
                 >
                   Edit Course
-              </button>
-              <button
-                onClick={() => handleDeleteCourse(course.course_id)}
-                className="mt-4 w-full px-4 py-2 text-white bg-red-500 rounded-md"
-              >
-                Delete Course
               </button>
             </div>
           ))
