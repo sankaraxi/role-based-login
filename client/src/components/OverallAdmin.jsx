@@ -1,6 +1,6 @@
 import React from 'react';
-import Admin from './Admin'; // Assuming Admin is in the same directory
 import CoursesAdminPanel from './CoursesAdminPanel';
+import Upload from './Upload';
 
 const OverallAdmin = () => {
   return (
@@ -10,7 +10,7 @@ const OverallAdmin = () => {
         {/* Upload Course Form */}
         <div className="bg-white p-4 shadow-md rounded-md">
           <h2 className="text-2xl font-semibold mb-4">Upload Course</h2>
-          <Admin />
+          <Upload />
         </div>
 
         {/* Available Courses Dashboard */}

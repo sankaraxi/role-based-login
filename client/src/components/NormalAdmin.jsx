@@ -1,10 +1,11 @@
-import CoursesSuperAdminPanel from './CoursesSuperAdminPanel';
+import React from 'react';
+import Courses from './Courses'; // Assuming Courses is in the same directory
 import Upload from './Upload';
 
 const SuperAdmin = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-semibold text-center mb-6">SuperAdmin Panel</h1>
+      <h1 className="text-3xl font-semibold text-center mb-6">Admin Panel</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Upload Course Form */}
         <div className="bg-white p-4 shadow-md rounded-md">
@@ -15,7 +16,7 @@ const SuperAdmin = () => {
         {/* Available Courses Dashboard */}
         <div className="bg-white p-4 shadow-md rounded-md">
           <h2 className="text-2xl font-semibold mb-4">Available Courses</h2>
-          <CoursesSuperAdminPanel />
+          <Courses />
         </div>
       </div>
     </div>

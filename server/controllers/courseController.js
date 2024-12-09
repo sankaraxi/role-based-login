@@ -84,7 +84,7 @@ const deleteCourse = (req, res) => {
       }
 
       if (result.affectedRows > 0) {
-        // Remove the image file from the uploads folder
+        //To Remove the image file from the uploads folder
         fs.unlink(imagePath, (err) => {
           if (err) {
             console.error('Failed to delete the image:', err);
@@ -102,5 +102,50 @@ const deleteCourse = (req, res) => {
   });
 };
 
+const updateCourse = (req, res) => {
+  const { courseId } = req.params;
+  const { title, price } = req.body;
+  const newImageKey = req.file ? req.file.filename : null;
 
-module.exports = { upload, uploadCourse, getAllCourses, deleteCourse };
+  // Fetch existing image key to delete old image
+  const getImageQuery = 'SELECT image_key FROM courses WHERE course_id = ?';
+  db.query(getImageQuery, [courseId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Database error occurred' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    const oldImageKey = results[0].image_key;
+
+    // Update course in database
+    const updateQuery =
+      'UPDATE courses SET title = ?, price = ?, image_key = ? WHERE course_id = ?';
+    db.query(
+      updateQuery,
+      [title, price, newImageKey || oldImageKey, courseId],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Failed to update course' });
+        }
+
+        if (newImageKey) {
+          const oldImagePath = path.join(__dirname, '..', 'uploads', oldImageKey);
+          fs.unlink(oldImagePath, (err) => {
+            if (err) {
+              console.error('Failed to delete old image:', err);
+            }
+          });
+        }
+
+        res.status(200).json({ course_id: courseId, title, price, image_key: newImageKey });
+      }
+    );
+  });
+};
+
+module.exports = { upload, uploadCourse, getAllCourses, deleteCourse, updateCourse };

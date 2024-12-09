@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom"
 import Login from "./components/Login"
 import RegisterUser from "./components/RegisterUser"
-import Admin from "./components/Admin"
+import NormalAdmin from "./components/NormalAdmin"
 import Courses from "./components/Courses"
 import SuperAdmin from "./components/SuperAdmin"
 import OverallAdmin from "./components/OverallAdmin"
@@ -29,7 +29,7 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <Admin />,
+        element: <NormalAdmin />,
       },
       {
         path: "/courses",

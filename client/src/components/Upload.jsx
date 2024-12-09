@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Admin = () => {
+const Upload = () => {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [image_key, setImage_key] = useState(null);
@@ -95,4 +95,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default Upload;
